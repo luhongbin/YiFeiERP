@@ -1,0 +1,46 @@
+con3=ODBC(6)
+IF SQLEXEC(con3,"SELECT * from remotion where remotion=?p_username and statusid='提醒' and DATEDIFF(day, dateid, GETDATE())<=1","RCtmp")<0
+	WAIT WINDOWS 'WAU'
+ENDIF	
+SQLDISCONNECT(con3)
+ con3 = odbc(5)
+ SELECT RCtmp
+ GOTO TOP
+ DO WHILE  .NOT. EOF()
+    ykeyid = VAL(keyvalue)
+    xkeyid=ALLTRIM(keyvalue)
+    		?xkeyid
+
+	SQLEXEC(con3,"select classid from pi where interid=?ykeyid ")
+	IF RECCOUNT()<1
+		WAIT WINDOWS xkeyid+':该PI已经不存在' NOWAIT  
+		CON2=ODBC(6)
+		?SQLEXEC(CON2,"UPDATE remotion SET statusid='不存在' WHERE (truckno='订单评审' or truckno='申请提交') and keyvalue=?xkeyid")
+		SQLDISCONNECT(con2)
+		SELECT RCtmp
+		DELETE 
+	ENDIF	    
+	SELECT RCtmp
+    DO CASE
+       CASE truckno='订单评审'
+          ?SQLEXEC(con3, "SELECT chkid from pi where interid=?ykeyid and chkid=1", "tmp1")
+          IF RECCOUNT()=1
+			CON2=ODBC(6)
+
+		 	?SQLEXEC(CON2,"UPDATE remotion SET and statusid='终审' WHEREN truckno='订单评审' and keyvalue=?xkeyid")	
+
+		 	SQLDISCONNECT(con2)
+             SELECT RCtmp
+             DELETE
+          ENDIF
+       CASE truckno='申请提交'
+          ?SQLEXEC(con3, "SELECT chkid from pi where interid=?ykeyid  and (requid=1 OR chkid=1)", "tmp1")
+          IF RECCOUNT()=1
+             SELECT RCtmp
+             DELETE
+          ENDIF
+    ENDCASE
+    SELECT RCtmp
+    skip
+ ENDDO
+SQLDISCONNECT(con3)

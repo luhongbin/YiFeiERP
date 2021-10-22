@@ -1,0 +1,8 @@
+P_Id=THIS.CAPTION+P_VICE＋'每天预交货表'
+Error in line 111: Syntax error.
+P_Id=THIS.CAPTION+P_VICE＋'产品预交货表'
+Error in line 143: Syntax error.
+P_Id=THIS.CAPTION+P_VICE＋'客户预交货表'
+Error in line 175: Syntax error.
+P_Id=THIS.CAPTION+KEYTXT＋'订单预交货表'
+Error in line 207: Syntax error.

@@ -1,0 +1,13 @@
+CON=ODBC(1)
+CON1=ODBC(7)
+*?SQLEXEC(CON1,"SELECT NAME,INDUSTRY FROM HEADINFODETAIl WHERE (INDUSTRY>'' and  INDUSTRY<>'-') ","tmp")
+SELECT tmp
+GO top
+DO WHILE .not. EOF()
+	x=name
+	y=INDUSTRY
+	WAIT windows TRANSFORM(RECNO()) nowait
+	SQLEXEC(con,"update HEADINFODETAIl set INDUSTRY=?y where name=?x")
+	SELECT tmp
+	SKIP
+ENDDO 

@@ -1,0 +1,4 @@
+P_TollBar=.F.
+CLOSE DATA
+DO FORM &P_Frms.BACKUP.SCX
+P_TollBar=.T.
